@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1920, initial-scale=1">
+<title>Home · London, Ontario</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Amiri+Quran&family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#06231d; --bg2:#0b3a30; --gold:#d8b46a; --gold2:#f3dca3; --ink:#f6efe1; --muted:#b9c7bf;
+    --card:rgba(6,35,29,.62); --line:rgba(216,180,106,.35);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{width:100%;height:100%;overflow:hidden;background:var(--bg)}
+  body{width:1920px;height:1080px;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}
+  body{
+    background:
+      radial-gradient(ellipse 70% 60% at 50% 38%, rgba(216,180,106,.16), transparent 70%),
+      linear-gradient(180deg,var(--bg2),var(--bg) 70%);
+  }
+  .pattern{position:fixed;inset:0;opacity:.09;pointer-events:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'><g fill='none' stroke='%23d8b46a' stroke-width='1.4'><rect x='30' y='30' width='60' height='60'/><rect x='30' y='30' width='60' height='60' transform='rotate(45 60 60)'/><circle cx='60' cy='60' r='14'/><path d='M0 0L30 30M120 0L90 30M0 120L30 90M120 120L90 90'/></g></svg>");
+    background-size:120px 120px}
+  .wrap{position:relative;height:100%;padding:56px 80px 48px;display:grid;grid-template-rows:auto 1fr auto;gap:28px}
+  header{display:flex;justify-content:space-between;align-items:flex-start}
+  .dates .greg{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:600;color:var(--ink)}
+  .dates .hijri{font-family:Amiri,serif;font-size:38px;color:var(--gold2);direction:rtl;text-align:left;margin-top:4px}
+  .dates .hijri-en{font-size:22px;color:var(--muted);margin-top:2px}
+  .bismillah{font-family:'Amiri Quran',Amiri,serif;font-size:50px;color:var(--gold);text-align:center;line-height:1.4}
+  .clock{text-align:right}
+  .clock .time{font-family:'Cormorant Garamond',serif;font-size:120px;font-weight:600;line-height:.9;letter-spacing:2px}
+  .clock .time small{font-size:44px;color:var(--gold);margin-left:8px}
+  .clock .place{font-size:22px;color:var(--muted);margin-top:10px;letter-spacing:3px;text-transform:uppercase}
+  main{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;min-height:0}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:36px 44px;backdrop-filter:blur(4px);position:relative}
+  .panel::before{content:"";position:absolute;inset:10px;border:1px solid rgba(216,180,106,.15);border-radius:20px;pointer-events:none}
+  .next .label{font-size:24px;letter-spacing:4px;text-transform:uppercase;color:var(--gold)}
+  .next .name{display:flex;align-items:baseline;gap:24px;margin-top:6px}
+  .next .name .en{font-family:'Cormorant Garamond',serif;font-size:84px;font-weight:700}
+  .next .name .ar{font-family:Amiri,serif;font-size:64px;color:var(--gold2)}
+  .next .count{font-family:'Cormorant Garamond',serif;font-size:132px;font-weight:600;line-height:1;margin-top:6px;font-variant-numeric:tabular-nums}
+  .next .at{font-size:26px;color:var(--muted);margin-top:8px}
+  .times{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:34px}
+  .t{border:1px solid var(--line);border-radius:18px;padding:18px 10px;text-align:center;background:rgba(0,0,0,.18)}
+  .t .ar{font-family:Amiri,serif;font-size:32px;color:var(--gold2)}
+  .t .en{font-size:20px;color:var(--muted);margin-top:2px}
+  .t .v{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:600;margin-top:6px}
+  .t.sun{opacity:.6}
+  .t.current{background:linear-gradient(180deg,rgba(216,180,106,.35),rgba(216,180,106,.12));border-color:var(--gold)}
+  .t.current .en{color:var(--ink)}
+  .right{display:grid;grid-template-rows:1.25fr 1fr;gap:28px;min-height:0}
+  .ayah .h,.dhikr .h{font-size:22px;letter-spacing:4px;text-transform:uppercase;color:var(--gold)}
+  .ayah .ar{font-family:'Amiri Quran',Amiri,serif;font-size:44px;line-height:1.85;direction:rtl;text-align:right;margin-top:14px;color:var(--ink)}
+  .ayah .en{font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1.35;color:var(--muted);margin-top:14px;font-style:italic}
+  .ayah .ref{font-size:20px;color:var(--gold);margin-top:12px}
+  .dhikr .ar{font-family:Amiri,serif;font-size:46px;line-height:1.6;direction:rtl;text-align:right;margin-top:12px;transition:opacity .8s}
+  .dhikr .en{font-size:24px;color:var(--muted);margin-top:8px;transition:opacity .8s}
+  .fade{opacity:0}
+  .clip{overflow:hidden}
+  footer{display:flex;justify-content:space-between;align-items:center}
+  .btns{display:flex;gap:18px}
+  button{font:600 24px Inter,sans-serif;color:var(--ink);background:rgba(0,0,0,.25);border:2px solid var(--line);border-radius:999px;padding:16px 34px;cursor:pointer}
+  button:focus,button.focus{outline:none;border-color:var(--gold2);background:rgba(216,180,106,.28);transform:scale(1.04)}
+  button.on{border-color:var(--gold);color:var(--gold2)}
+  .hint{font-size:20px;color:var(--muted)}
+  #adhan{position:fixed;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;background:rgba(3,20,16,.93);z-index:10;text-align:center}
+  #adhan.show{display:flex}
+  #adhan .ar{font-family:Amiri,serif;font-size:120px;color:var(--gold2)}
+  #adhan .en{font-family:'Cormorant Garamond',serif;font-size:64px;margin-top:10px}
+  #adhan .sub{font-size:26px;color:var(--muted);margin-top:24px}
+  #start{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;background:rgba(3,20,16,.88);z-index:20;text-align:center}
+  #start.hide{display:none}
+  #start .ar{font-family:Amiri,serif;font-size:72px;color:var(--gold2)}
+  #start p{font-size:30px;margin-top:18px;color:var(--ink)}
+  #start p small{display:block;font-size:22px;color:var(--muted);margin-top:10px}
+</style>
+</head>
+<body>
+<div class="pattern"></div>
+<div class="wrap">
+  <header>
+    <div class="dates">
+      <div class="greg" id="greg">—</div>
+      <div class="hijri" id="hijri">—</div>
+      <div class="hijri-en" id="hijriEn"></div>
+    </div>
+    <div class="bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
+    <div class="clock">
+      <div class="time" id="clock">--:--</div>
+      <div class="place">London · Ontario</div>
+    </div>
+  </header>
+  <main>
+    <section class="panel next">
+      <div class="label" id="nextLabel">Next prayer</div>
+      <div class="name"><span class="en" id="nextEn">—</span><span class="ar" id="nextAr"></span></div>
+      <div class="count" id="count">--:--:--</div>
+      <div class="at" id="nextAt"></div>
+      <div class="times" id="times"></div>
+    </section>
+    <div class="right">
+      <section class="panel ayah clip">
+        <div class="h">Ayah of the day</div>
+        <div class="ar" id="ayahAr">فَٱذْكُرُونِىٓ أَذْكُرْكُمْ وَٱشْكُرُوا۟ لِى وَلَا تَكْفُرُونِ</div>
+        <div class="en" id="ayahEn">So remember Me, and I will remember you. Be grateful to Me and do not be ungrateful.</div>
+        <div class="ref" id="ayahRef">Al-Baqarah · 2:152</div>
+      </section>
+      <section class="panel dhikr clip">
+        <div class="h">Remembrance</div>
+        <div class="ar" id="dhikrAr"></div>
+        <div class="en" id="dhikrEn"></div>
+      </section>
+    </div>
+  </main>
+  <footer>
+    <div class="btns" id="btns">
+      <button id="bQuran">▶ Quran radio</button>
+      <button id="bAdhan" class="on">🔔 Adhan: On</button>
+      <button id="bTest">Test adhan</button>
+    </div>
+    <div class="hint">Use ◀ ▶ and OK on your remote · Times: ISNA method</div>
+  </footer>
+</div>
+<div id="adhan"><div class="ar" id="adhanAr"></div><div class="en" id="adhanEn"></div><div class="sub">Press OK to stop the adhan</div></div>
+<div id="start"><div class="ar">السلام عليكم</div><p>Press OK on your remote to start<small>This lets the adhan play automatically at prayer times</small></p></div>
+<audio id="adhanAudio" preload="none"></audio>
+<audio id="quranAudio" preload="none"></audio>
+<script>
+const LAT = 42.9849, LNG = -81.2453;
+const FAJR_ANGLE = 15, ISHA_ANGLE = 15;
+const ASR_FACTOR = 1;
+const ADHAN_URLS = ['https://cdn.aladhan.com/audio/adhans/a1.mp3','https://www.islamcan.com/audio/adhan/azan2.mp3'];
+const QURAN_RADIO = 'https://backup.qurango.net/radio/mishary_alafasi';
+const PRAYERS = [
+  {k:'fajr',en:'Fajr',ar:'الفجر'},{k:'sunrise',en:'Sunrise',ar:'الشروق'},{k:'dhuhr',en:'Dhuhr',ar:'الظهر'},
+  {k:'asr',en:'Asr',ar:'العصر'},{k:'maghrib',en:'Maghrib',ar:'المغرب'},{k:'isha',en:'Isha',ar:'العشاء'}
+];
+const rad=d=>d*Math.PI/180, deg=r=>r*180/Math.PI;
+const sin=d=>Math.sin(rad(d)), cos=d=>Math.cos(rad(d)), tan=d=>Math.tan(rad(d));
+const asin=x=>deg(Math.asin(x)), acos=x=>deg(Math.acos(x)), atan2=(y,x)=>deg(Math.atan2(y,x)), acot=x=>deg(Math.atan(1/x));
+const fix=(a,b)=>{a=a-b*Math.floor(a/b);return a<0?a+b:a};
+function julian(y,m,d){ if(m<=2){y-=1;m+=12} const A=Math.floor(y/100),B=2-A+Math.floor(A/4);
+  return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524.5 }
+function sunPos(jd){ const D=jd-2451545, g=fix(357.529+.98560028*D,360), q=fix(280.459+.98564736*D,360),
+  L=fix(q+1.915*sin(g)+.020*sin(2*g),360), e=23.439-.00000036*D, RA=atan2(cos(e)*sin(L),cos(L))/15;
+  return {decl:asin(sin(e)*sin(L)), eqt:q/15-fix(RA,24)} }
+function prayerTimes(date){
+  const jd=julian(date.getFullYear(),date.getMonth()+1,date.getDate())-LNG/(15*24);
+  const tz=-date.getTimezoneOffset()/60;
+  const noon=t=>fix(12-sunPos(jd+t).eqt,24);
+  const angleTime=(angle,t,ccw)=>{const s=sunPos(jd+t),n=noon(t);
+    const T=acos((-sin(angle)-sin(s.decl)*sin(LAT))/(cos(s.decl)*cos(LAT)))/15; return n+(ccw?-T:T)};
+  const asrTime=t=>{const s=sunPos(jd+t); return angleTime(-acot(ASR_FACTOR+tan(Math.abs(LAT-s.decl))),t,false)};
+  let r={fajr:angleTime(FAJR_ANGLE,5/24,true),sunrise:angleTime(.833,6/24,true),dhuhr:noon(12/24),
+         asr:asrTime(13/24),maghrib:angleTime(.833,18/24,false),isha:angleTime(ISHA_ANGLE,18/24,false)};
+  const out={};
+  for(const k in r){ let h=r[k]+tz-LNG/15; if(k==='dhuhr') h+=1/60;
+    const d=new Date(date.getFullYear(),date.getMonth(),date.getDate(),0,0,0);
+    d.setTime(d.getTime()+Math.round(h*60)*60000); out[k]=d }
+  return out;
+}
+const $=id=>document.getElementById(id);
+const fmt=d=>d.toLocaleTimeString('en-CA',{hour:'numeric',minute:'2-digit',hour12:true}).replace('a.m.','AM').replace('p.m.','PM');
+const pad=n=>String(n).padStart(2,'0');
+let today=null, times=null, firedKey=localStorage.getItem('firedKey')||'';
+function buildDay(){
+  const now=new Date(); today=now.toDateString(); times=prayerTimes(now);
+  $('times').innerHTML=PRAYERS.map(p=>`<div class="t ${p.k==='sunrise'?'sun':''}" id="t-${p.k}"><div class="ar">${p.ar}</div><div class="en">${p.en}</div><div class="v">${fmt(times[p.k])}</div></div>`).join('');
+  $('greg').textContent=now.toLocaleDateString('en-CA',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  try{
+    $('hijri').textContent=new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura-nu-arab',{day:'numeric',month:'long',year:'numeric'}).format(now);
+    $('hijriEn').textContent=new Intl.DateTimeFormat('en-u-ca-islamic-umalqura',{day:'numeric',month:'long',year:'numeric'}).format(now);
+  }catch(e){}
+  loadAyah(now);
+}
+function tick(){
+  const now=new Date();
+  if(now.toDateString()!==today) buildDay();
+  $('clock').innerHTML=fmt(now).replace(/ (AM|PM)/,'<small>$1</small>');
+  const order=PRAYERS.filter(p=>p.k!=='sunrise');
+  let next=order.find(p=>times[p.k]>now), nextTime;
+  if(next){ nextTime=times[next.k] } else { next=order[0]; nextTime=prayerTimes(new Date(now.getTime()+864e5)).fajr }
+  let cur=[...PRAYERS].reverse().find(p=>times[p.k]<=now);
+  document.querySelectorAll('.t').forEach(e=>e.classList.remove('current'));
+  if(cur) $('t-'+cur.k)?.classList.add('current');
+  const s=Math.max(0,Math.floor((nextTime-now)/1000));
+  $('nextEn').textContent=next.en; $('nextAr').textContent=next.ar;
+  $('count').textContent=`${pad(Math.floor(s/3600))}:${pad(Math.floor(s%3600/60))}:${pad(s%60)}`;
+  $('nextAt').textContent=`at ${fmt(nextTime)}`;
+  for(const p of order){ const t=times[p.k], key=today+p.k;
+    if(now>=t && now-t<60000 && firedKey!==key){ firedKey=key; localStorage.setItem('firedKey',key); if(adhanOn) playAdhan(p) } }
+}
+async function loadAyah(now){
+  const start=new Date(now.getFullYear(),0,0), day=Math.floor((now-start)/864e5);
+  const n=((now.getFullYear()*367+day*97)%6236)+1;
+  const cacheKey='ayah-'+now.toDateString();
+  try{
+    let data=JSON.parse(localStorage.getItem(cacheKey)||'null');
+    if(!data){ const r=await fetch(`https://api.alquran.cloud/v1/ayah/${n}/editions/quran-uthmani,en.sahih`); data=(await r.json()).data;
+      try{localStorage.setItem(cacheKey,JSON.stringify(data))}catch(e){} }
+    const [ar,en]=data;
+    if(ar.text.length>330) return;
+    $('ayahAr').textContent=ar.text; $('ayahEn').textContent=en.text;
+    $('ayahRef').textContent=`${ar.surah.englishName} · ${ar.surah.number}:${ar.numberInSurah}`;
+  }catch(e){}
+}
+const ADHKAR=[
+  ['سُبْحَانَ ٱللَّهِ وَبِحَمْدِهِ، سُبْحَانَ ٱللَّهِ ٱلْعَظِيمِ','Glory be to Allah and praise be to Him; glory be to Allah, the Most Great.'],
+  ['لَا إِلَٰهَ إِلَّا ٱللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ ٱلْمُلْكُ وَلَهُ ٱلْحَمْدُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ','There is no god but Allah, alone, without partner. His is the dominion and His is the praise, and He has power over all things.'],
+  ['أَسْتَغْفِرُ ٱللَّهَ وَأَتُوبُ إِلَيْهِ','I seek Allah’s forgiveness and turn to Him in repentance.'],
+  ['ٱللَّهُمَّ صَلِّ وَسَلِّمْ عَلَىٰ نَبِيِّنَا مُحَمَّدٍ','O Allah, send blessings and peace upon our Prophet Muhammad.'],
+  ['لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِٱللَّهِ','There is no power and no strength except with Allah.'],
+  ['رَضِيتُ بِٱللَّهِ رَبًّا، وَبِٱلْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ ﷺ نَبِيًّا','I am pleased with Allah as my Lord, Islam as my religion, and Muhammad ﷺ as my Prophet.'],
+  ['حَسْبِيَ ٱللَّهُ لَا إِلَٰهَ إِلَّا هُوَ، عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ ٱلْعَرْشِ ٱلْعَظِيمِ','Allah is sufficient for me; there is no god but Him. In Him I trust, and He is Lord of the Mighty Throne.'],
+  ['رَبَّنَا آتِنَا فِي ٱلدُّنْيَا حَسَنَةً وَفِي ٱلْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ ٱلنَّارِ','Our Lord, give us good in this world and good in the Hereafter, and protect us from the punishment of the Fire.']
+];
+let di=Math.floor(Date.now()/60000)%ADHKAR.length;
+function showDhikr(){ const a=$('dhikrAr'),e=$('dhikrEn'); a.classList.add('fade'); e.classList.add('fade');
+  setTimeout(()=>{ [a.textContent,e.textContent]=ADHKAR[di]; di=(di+1)%ADHKAR.length; a.classList.remove('fade'); e.classList.remove('fade') },800) }
+const adhanAudio=$('adhanAudio'), quranAudio=$('quranAudio');
+let adhanOn=localStorage.getItem('adhanOn')!=='0', quranWasPlaying=false;
+function setAdhanBtn(){ $('bAdhan').textContent=adhanOn?'🔔 Adhan: On':'🔕 Adhan: Off'; $('bAdhan').classList.toggle('on',adhanOn) }
+function playAdhan(p){
+  quranWasPlaying=!quranAudio.paused; quranAudio.pause();
+  $('adhanAr').textContent='حان الآن موعد صلاة '+p.ar; $('adhanEn').textContent='Time for '+p.en;
+  $('adhan').classList.add('show');
+  let i=0; const tryNext=()=>{ if(i>=ADHAN_URLS.length) return; adhanAudio.src=ADHAN_URLS[i++]; adhanAudio.play().catch(tryNext) };
+  adhanAudio.onerror=tryNext; tryNext();
+}
+function stopAdhan(){ adhanAudio.pause(); adhanAudio.currentTime=0; $('adhan').classList.remove('show'); if(quranWasPlaying) quranAudio.play().catch(()=>{}) }
+adhanAudio.onended=()=>setTimeout(stopAdhan,4000);
+function toggleQuran(){ if(quranAudio.paused){ quranAudio.src=QURAN_RADIO; quranAudio.play().catch(()=>{}); $('bQuran').textContent='❚❚ Quran radio'; $('bQuran').classList.add('on') }
+  else { quranAudio.pause(); quranAudio.removeAttribute('src'); $('bQuran').textContent='▶ Quran radio'; $('bQuran').classList.remove('on') } }
+const btns=[$('bQuran'),$('bAdhan'),$('bTest')]; let fi=0;
+function focusBtn(i){ fi=(i+btns.length)%btns.length; btns.forEach((b,j)=>b.classList.toggle('focus',j===fi)); btns[fi].focus() }
+btns[0].onclick=toggleQuran;
+btns[1].onclick=()=>{ adhanOn=!adhanOn; localStorage.setItem('adhanOn',adhanOn?'1':'0'); setAdhanBtn() };
+btns[2].onclick=()=>playAdhan(PRAYERS[2]);
+function start(){ $('start').classList.add('hide'); adhanAudio.src=ADHAN_URLS[0]; adhanAudio.muted=true;
+  adhanAudio.play().then(()=>{adhanAudio.pause();adhanAudio.muted=false;adhanAudio.currentTime=0}).catch(()=>{adhanAudio.muted=false}); focusBtn(0) }
+document.addEventListener('keydown',e=>{
+  if(!$('start').classList.contains('hide')){ if(['Enter',' '].includes(e.key)||e.keyCode===13){ e.preventDefault(); start() } return }
+  if($('adhan').classList.contains('show')){ if(e.key==='Enter'||e.keyCode===13||e.key==='Escape'||e.keyCode===10009){ e.preventDefault(); stopAdhan() } return }
+  if(e.key==='ArrowRight'||e.keyCode===39){ e.preventDefault(); focusBtn(fi+1) }
+  else if(e.key==='ArrowLeft'||e.keyCode===37){ e.preventDefault(); focusBtn(fi-1) }
+  else if(e.key==='Enter'||e.keyCode===13){ e.preventDefault(); btns[fi].click() }
+});
+$('start').onclick=start; $('adhan').onclick=stopAdhan;
+setAdhanBtn(); buildDay(); tick(); showDhikr();
+setInterval(tick,1000); setInterval(showDhikr,20000);
+function fit(){ const s=Math.min(innerWidth/1920,innerHeight/1080); document.body.style.transform=`scale(${s})`; document.body.style.transformOrigin='0 0' }
+addEventListener('resize',fit); fit();
+</script>
+</body>
+</html>
